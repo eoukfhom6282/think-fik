@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CSS Fire Animation</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: radial-gradient(circle at center, #1a1a1a, #000000);
+      overflow: hidden;
+      font-family: Arial, sans-serif;
+    }
+
+    .scene {
+      position: relative;
+      width: 300px;
+      height: 400px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+    }
+
+    .fire {
+      position: relative;
+      width: 120px;
+      height: 220px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      filter: blur(0.5px);
+    }
+
+    .flame {
+      position: absolute;
+      bottom: 0;
+      border-radius: 50% 50% 40% 40%;
+      transform-origin: center bottom;
+      animation: flicker 2s infinite ease-in-out;
+      mix-blend-mode: screen;
+    }
+
+    .flame1 {
+      width: 120px;
+      height: 180px;
+      background: radial-gradient(circle at 50% 80%, #ffff66, #ff9900 60%, #ff3300 100%);
+      animation-delay: 0s;
+      z-index: 4;
+    }
+
+    .flame2 {
+      width: 90px;
+      height: 150px;
+      background: radial-gradient(circle at 50% 80%, #fff7a8, #ffcc00 55%, #ff6600 100%);
+      animation-delay: 0.3s;
+      z-index: 5;
+    }
+
+    .flame3 {
+      width: 60px;
+      height: 110px;
+      background: radial-gradient(circle at 50% 80%, #ffffff, #ffff99 45%, #ffcc00 100%);
+      animation-delay: 0.6s;
+      z-index: 6;
+    }
+
+    .glow {
+      position: absolute;
+      width: 180px;
+      height: 180px;
+      background: radial-gradient(circle, rgba(255,140,0,0.6), transparent 70%);
+      bottom: 10px;
+      border-radius: 50%;
+      filter: blur(30px);
+      animation: pulse 3s infinite ease-in-out;
+    }
+
+    .wood {
+      position: absolute;
+      bottom: -15px;
+      width: 160px;
+      height: 20px;
+    }
+
+    .log {
+      position: absolute;
+      width: 90px;
+      height: 16px;
+      background: linear-gradient(to right, #5b3a1e, #8b5a2b);
+      border-radius: 20px;
+      box-shadow: inset 0 0 5px rgba(0,0,0,0.4);
+    }
+
+    .log:first-child {
+      transform: rotate(25deg);
+      left: 20px;
+    }
+
+    .log:last-child {
+      transform: rotate(-25deg);
+      right: 20px;
+    }
+
+    .particle {
+      position: absolute;
+      bottom: 20px;
+      width: 8px;
+      height: 8px;
+      background: orange;
+      border-radius: 50%;
+      opacity: 0;
+      animation: rise linear infinite;
+    }
+
+    @keyframes flicker {
+      0%, 100% {
+        transform: scale(1) rotate(-1deg);
+      }
+
+      25% {
+        transform: scale(1.05, 0.95) rotate(1deg);
+      }
+
+      50% {
+        transform: scale(0.95, 1.05) rotate(-2deg);
+      }
+
+      75% {
+        transform: scale(1.02, 0.98) rotate(2deg);
+      }
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        transform: scale(1);
+        opacity: 0.7;
+      }
+
+      50% {
+        transform: scale(1.2);
+        opacity: 1;
+      }
+    }
+
+    @keyframes rise {
+      0% {
+        transform: translateY(0) translateX(0) scale(1);
+        opacity: 1;
+      }
+
+      100% {
+        transform: translateY(-220px) translateX(var(--drift)) scale(0);
+        opacity: 0;
+      }
+    }
+
+    .title {
+      position: absolute;
+      top: 40px;
+      color: white;
+      letter-spacing: 2px;
+      font-size: 1.2rem;
+      text-transform: uppercase;
+      opacity: 0.85;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="title">CSS Fire Animation</div>
+
+  <div class="scene">
+    <div class="glow"></div>
+
+    <div class="fire">
+      <div class="flame flame1"></div>
+      <div class="flame flame2"></div>
+      <div class="flame flame3"></div>
+    </div>
+
+    <div class="wood">
+      <div class="log"></div>
+      <div class="log"></div>
+    </div>
+  </div>
+
+  <script>
+    const scene = document.querySelector('.scene');
+
+    function createParticle() {
+      const particle = document.createElement('div');
+      particle.classList.add('particle');
+
+      const size = Math.random() * 6 + 4;
+      particle.style.width = `${size}px`;
+      particle.style.height = `${size}px`;
+
+      particle.style.left = `${140 + Math.random() * 40}px`;
+      particle.style.animationDuration = `${2 + Math.random() * 3}s`;
+      particle.style.setProperty('--drift', `${(Math.random() - 0.5) * 120}px`);
+
+      scene.appendChild(particle);
+
+      setTimeout(() => {
+        particle.remove();
+      }, 5000);
+    }
+
+    setInterval(createParticle, 120);
+  </script>
+</body>
+</html>
